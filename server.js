@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var fs = require('fs');
 var jade = require('jade');
+var _ = require("underscore");
 
 app.get('/', function(req, res){
   jade.renderFile('jade/index.jade', {mainTitle : 'Index page'}, function (err, html) {
@@ -104,7 +105,45 @@ app.get('/:country', function(req, res){
 });
 
 app.get('/:country/:icon_id', function(req, res){
-  res.send('Hello');
+  var country = req.params.country.toLowerCase();
+  var iconID = req.params.icon_id.toLowerCase();
+  var objectName;
+  
+  fs.readFile('./countries/'+country+'.json', function (err, data) {
+
+    if (err) {
+      console.log("file read", err);
+      res.redirect('/404');
+    } 
+    else {
+      var items = JSON.parse(data.toString());
+
+      if (iconID > items.length) {
+        res.redirect('/404');
+      };
+
+      _.each(items, function(object) {
+        
+        if(object.id == iconID) {
+          objectName = object.name;
+        }
+
+      })
+
+      jade.renderFile('jade/icon.jade', {mainTitle: "My title", myCountry: country, myiconID: iconID, iconName: objectName}, function (err, html) {
+
+        if (err) {
+          console.log("HTML render", err);
+          res.redirect('/404');
+        } 
+
+        var html_answer = html;
+        res.send(html_answer);
+
+      });
+
+    }
+  });
 });
 
 app.listen(3000);
