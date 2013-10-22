@@ -97,11 +97,8 @@ app.get('/:country', function(req, res){
         res.send(html_answer);
 
       });
-
     }
-
   });
-
 });
 
 app.get('/:country/:icon_id', function(req, res){
@@ -122,13 +119,8 @@ app.get('/:country/:icon_id', function(req, res){
         res.redirect('/404');
       };
 
-      _.each(items, function(object) {
-        
-        if(object.id == iconID) {
-          objectName = object.name;
-        }
-
-      })
+      var item = _.findWhere(items, { 'id': iconID });
+      objectName = item.name;
 
       jade.renderFile('jade/icon.jade', {mainTitle: "My title", myCountry: country, myiconID: iconID, iconName: objectName}, function (err, html) {
 
