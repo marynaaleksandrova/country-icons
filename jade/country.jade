@@ -11,6 +11,6 @@ html(lang="en")
   body
     h2 Contry icons:
     ul
-    each icon in iconItems
+    each icon in icons
       li
-        a(href="/#{myCountry}/#{icon.id}") #{icon.name}
+        a(href="/#{iconCountry}/#{icon.id}") #{icon.name}
