@@ -35,8 +35,8 @@ function getCountryData(country, res, callbackFunction) {
       res.redirect('/404');
     } 
     else {
-      var items = JSON.parse(data.toString());
-      callbackFunction(country, items);
+      var icons = JSON.parse(data.toString());
+      callbackFunction(country, icons);
     }
   });
 }
@@ -62,9 +62,9 @@ function renderHTML(res, jadeFile, pageTitle, iconCountry, icons, iconID, iconNa
 app.get('/:country', function (req, res){
   var countryName = req.params.country.toLowerCase();
   
-  getCountryData(countryName, res, function (countryName, items) {
+  getCountryData(countryName, res, function (countryName, icons) {
 
-    renderHTML(res, 'jade/country.jade', "My title", countryName, items);
+    renderHTML(res, 'jade/country.jade', "My title", countryName, icons);
   });
 });
 
@@ -74,23 +74,25 @@ app.get('/:country', function (req, res){
 app.get('/:country/:icon_id', function (req, res){
   var countryName = req.params.country.toLowerCase();
   var iconID = req.params.icon_id.toLowerCase();
-  
-  getCountryData(countryName, res, function (countryName, items, iconID) {
+    
+  getCountryData(countryName, res, function (countryName, icons) {
 
-    if (iconID > items.length) {
+    console.log(icons);
+
+    if (iconID > icons.length) {
       res.redirect('/404');
     }
     else {
-      var object = _.findWhere(items, { 'id': iconID });
 
-      console.log(items, iconID);
-      iconName = item.name;
+    var iconData = _.findWhere(icons, {'id': iconID });
 
-      renderHTML(res, 'jade/icon.jade', "My title", countryName, items, iconID, iconName);
+    console.log(iconData);
+    var iconName = iconData.name;
+
+    renderHTML(res, 'jade/icon.jade', "My title", countryName, icons, iconID, "iconName");
+
     }
-
   }); 
-
 });
 
 
