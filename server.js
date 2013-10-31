@@ -25,6 +25,28 @@ app.get('/favicon.ico', function(req, res){
   res.send(404, 'Sorry, we cannot find that!');
 });
 
+app.get('/index.css', function(req, res){
+  fs.readFile('dist/index.css', function (err, data) {
+    if (err) {
+      console.log("file read", err);
+      res.redirect('/404');
+    } else {
+      res.send(data.toString());
+    }
+  });
+});
+
+app.get('/app.js', function(req, res){
+  fs.readFile('dist/app.js', function (err, data) {
+    if (err) {
+      console.log("file read", err);
+      res.redirect('/404');
+    } else {
+      res.send(data.toString());
+    }
+  });
+});
+
 
 function getCountryData(country, res, callbackFunction) {
   
@@ -77,7 +99,7 @@ app.get('/:country/:icon_id', function (req, res){
     
   getCountryData(countryName, res, function (countryName, icons) {
 
-    console.log(icons);
+    console.log("icons", icons, iconID);
 
     if (iconID > icons.length) {
       res.redirect('/404');
